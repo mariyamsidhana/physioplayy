@@ -137,7 +137,7 @@ class Login extends StatelessWidget {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/login');
+                          Navigator.pushNamed(context, '/pickgame');
                         },
                         style: ButtonStyle(
                           backgroundColor:

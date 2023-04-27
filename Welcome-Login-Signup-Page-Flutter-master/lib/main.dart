@@ -1,11 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'pages/login.dart';
-import 'pages/signup.dart';
-import 'pages/welcome.dart';
-import 'pages/pickgame.dart';
+import 'package:flutter_auth_page/pages/login.dart';
+import 'package:flutter_auth_page/pages/signup.dart';
+import 'package:flutter_auth_page/pages/welcome.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
   runApp(const MyApp());
 }
 
@@ -26,7 +30,6 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Welcome(),
         '/login': (context) => const Login(),
         '/signup': (context) => const Signup(),
-        '/pickgame': (context) => const games(),
       },
     );
   }

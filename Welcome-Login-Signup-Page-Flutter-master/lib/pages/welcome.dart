@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_auth_page/constants.dart';
 
-class Welcome extends StatelessWidget {
+
+class Welcome extends StatefulWidget {
   const Welcome({super.key});
 
+  @override
+  State<Welcome> createState() => _WelcomeState();
+}
+
+class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,7 +44,7 @@ class Welcome extends StatelessWidget {
                   children: [
                     const SizedBox(height: 40),
                     Text(
-                      'Phsioplay'.toUpperCase(),
+                      'Physioplay'.toUpperCase(),
                       style: const TextStyle(
                         fontFamily: 'SourceSansPro',
                         fontSize: 50,
@@ -121,6 +127,7 @@ class Welcome extends StatelessWidget {
           ),
         ),
       ),
-    );
+    );;
   }
 }
+

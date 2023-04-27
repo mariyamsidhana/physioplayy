@@ -1,12 +1,24 @@
+import 'dart:math';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_page/widgets/divider.dart';
 import 'package:flutter_auth_page/widgets/socials.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_auth_page/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class Signup extends StatelessWidget {
+class Signup extends StatefulWidget {
   const Signup({super.key});
 
+  @override
+  State<Signup> createState() => _SignupState();
+}
+
+class _SignupState extends State<Signup> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -59,7 +71,7 @@ class Signup extends StatelessWidget {
                     SvgPicture.asset(
                       'assets/icons/domain_names.svg',
                       width: 240,
-                      height:100,
+                      height: 100,
                     ),
                     const SizedBox(height: 30),
                     Container(
@@ -70,11 +82,12 @@ class Signup extends StatelessWidget {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: emailController,
                         obscureText: false,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Your Email :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -95,7 +108,6 @@ class Signup extends StatelessWidget {
                         ),
                       ),
                     ),
-
 
                     const SizedBox(height: 16),
                     Container(
@@ -128,11 +140,7 @@ class Signup extends StatelessWidget {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: kPrimaryColor,
-                            size: 18,
-                          ),
+                         
                         ),
                       ),
                     ),
@@ -146,11 +154,14 @@ class Signup extends StatelessWidget {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
-                        obscureText: false,
+                      child: TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Password :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -186,11 +197,14 @@ class Signup extends StatelessWidget {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
-                        obscureText: false,
+                      child: TextField(
+                        controller: cPasswordController,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Confirm Password :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -248,11 +262,7 @@ class Signup extends StatelessWidget {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: kPrimaryColor,
-                            size: 18,
-                          ),
+                        
                         ),
                       ),
                     ),
@@ -288,11 +298,7 @@ class Signup extends StatelessWidget {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: kPrimaryColor,
-                            size: 18,
-                          ),
+                          
                         ),
                       ),
                     ),
@@ -302,9 +308,7 @@ class Signup extends StatelessWidget {
                       width: 300,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
+                        onPressed: createAccount,
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStateProperty.all(kPrimaryColor),
@@ -368,5 +372,77 @@ class Signup extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void createAccount() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    String cPassword = cPasswordController.text.trim();
+
+    // create new account
+
+    if (password != cPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: const [
+              // Icon(icon, color: Colors.white),
+              SizedBox(width: 8.0),
+              Text("Passwords aren't matching"),
+            ],
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } else {
+      try {
+        FocusScope.of(context).unfocus();
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+
+        print("User created");
+        if (userCredential.user != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: const [
+                  // Icon(icon, color: Colors.white),
+                  SizedBox(width: 8.0),
+                  Text("Successfully Created Account"),
+                ],
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context);
+        }
+      } on FirebaseAuthException catch (e) {
+        print(e.code.toString());
+        String errorMessage;
+        if (e.code == 'weak-password') {
+          errorMessage = 'The password provided is too weak';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'The account already exists for that email';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'The email provided is invalid';
+        } else if (e.code == 'operation-not-allowed') {
+          errorMessage = 'Account creation is not allowed';
+        } else {
+          errorMessage = 'Error creating account';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                // Icon(icon, color: Colors.white),
+                SizedBox(width: 8.0),
+                Text(errorMessage),
+              ],
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

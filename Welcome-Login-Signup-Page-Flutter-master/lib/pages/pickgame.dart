@@ -156,7 +156,7 @@ class _gamesState extends State<games> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Ink.image(
-                            image: AssetImage('assets/images/shooter.png'),
+                            image: AssetImage('images/dino.jpg'),
                             height: 150,
                             width: 150,
                             fit: BoxFit.cover,
@@ -165,7 +165,7 @@ class _gamesState extends State<games> {
                             height: 3,
                           ),
                           Text(
-                            'Shooter',
+                            'Dino Run',
                             style: TextStyle(fontSize: 20, color: Colors.white),
                           )
                         ],

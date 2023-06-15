@@ -14,21 +14,22 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool _obscureText = true;
 
   Future signIn() async {
     if (emailController.text == "" || passwordController.text == "") {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                // Icon(icon, color: Colors.white),
-                SizedBox(width: 8.0),
-                Text("Please enter all fields"),
-              ],
-            ),
-            backgroundColor: Colors.red,
+        SnackBar(
+          content: Row(
+            children: [
+              // Icon(icon, color: Colors.white),
+              SizedBox(width: 8.0),
+              Text("Please enter all fields"),
+            ],
           ),
-        );
+          backgroundColor: Colors.red,
+        ),
+      );
     } else {
       try {
         FocusScope.of(context).unfocus();
@@ -200,35 +201,38 @@ class _LoginState extends State<Login> {
                     ),
                     child: TextField(
                       controller: passwordController,
-                      obscureText: true,
+                      obscureText: _obscureText,
                       enableSuggestions: false,
                       autocorrect: false,
                       keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.done,
-                      decoration: const InputDecoration(
-                        hintText: "Password :",
-                        hintStyle: TextStyle(
-                          fontFamily: 'SourceSansPro',
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        // labelText: "Email :",
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                        ),
-                        // border: OutlineInputBorder(),
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: kPrimaryColor,
-                          size: 18,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.visibility,
-                          color: kPrimaryColor,
-                          size: 18,
-                        ),
-                      ),
+                      decoration:  InputDecoration(
+                          hintText: "Password :",
+                          hintStyle: TextStyle(
+                            fontFamily: 'SourceSansPro',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          // labelText: "Email :",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                          ),
+                          // border: OutlineInputBorder(),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: kPrimaryColor,
+                            size: 18,
+                          ),
+                          suffixIcon:  GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                 _obscureText = !_obscureText;
+                              });
+                             
+                            },
+                            child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                          )),
                     ),
                   ),
                   const SizedBox(height: 16),

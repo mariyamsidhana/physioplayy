@@ -7,6 +7,7 @@ import 'package:flutter_auth_page/widgets/socials.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_auth_page/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -16,10 +17,26 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController cPasswordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final cPasswordController = TextEditingController();
+  final usernameController = TextEditingController();
+  final ageController = TextEditingController();
+  final medController = TextEditingController();
+  bool _obscureText = true;
+   bool _obscureTextt = true;
+
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    cPasswordController.dispose();
+    usernameController.dispose();
+    ageController.dispose();
+    medController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -118,7 +135,8 @@ class _SignupState extends State<Signup> {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: usernameController,
                         obscureText: false,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
@@ -140,7 +158,6 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                         
                         ),
                       ),
                     ),
@@ -156,12 +173,12 @@ class _SignupState extends State<Signup> {
                       ),
                       child: TextField(
                         controller: passwordController,
-                        obscureText: true,
+                        obscureText: _obscureText,
                         enableSuggestions: false,
                         autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: "Password :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -179,10 +196,15 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: kPrimaryColor,
-                            size: 18,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                            child: Icon(_obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                           ),
                         ),
                       ),
@@ -199,12 +221,12 @@ class _SignupState extends State<Signup> {
                       ),
                       child: TextField(
                         controller: cPasswordController,
-                        obscureText: true,
+                        obscureText: _obscureTextt,
                         enableSuggestions: false,
                         autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done,
-                        decoration: const InputDecoration(
+                        decoration:  InputDecoration(
                           hintText: "Confirm Password :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -222,10 +244,14 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: kPrimaryColor,
-                            size: 18,
+                          suffixIcon:   GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                 _obscureTextt = !_obscureTextt;
+                              });
+                             
+                            },
+                            child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
                           ),
                         ),
                       ),
@@ -240,7 +266,8 @@ class _SignupState extends State<Signup> {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: ageController,
                         obscureText: false,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
@@ -262,7 +289,6 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                        
                         ),
                       ),
                     ),
@@ -276,7 +302,8 @@ class _SignupState extends State<Signup> {
                         borderRadius: BorderRadius.circular(66),
                         color: kPrimaryLightColor,
                       ),
-                      child: const TextField(
+                      child: TextField(
+                        controller: medController,
                         obscureText: false,
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.done,
@@ -298,7 +325,6 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          
                         ),
                       ),
                     ),
@@ -400,7 +426,22 @@ class _SignupState extends State<Signup> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
+        Future addUserDetails(String name, int age, String med) async {
+          await FirebaseFirestore.instance.collection('users').add({
+            'username': name,
+            'age': age,
+            'medical condition': med,
+          });
+        }
+
+        addUserDetails(
+          usernameController.text.trim(),
+          int.parse(ageController.text.trim()),
+          medController.text.trim(),
+        );
+
         print("User created");
+
         if (userCredential.user != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

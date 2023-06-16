@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_page/pages/pickgame.dart';
+import 'package:flutter_auth_page/pages/drawer.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_auth_page/constants.dart';
+import 'package:flutter_auth_page/pages/drawerlist.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -55,7 +57,7 @@ class _LoginState extends State<Login> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => games(),
+              builder: (context) => HomeScreen(),
             ),
           );
           emailController.text = "";

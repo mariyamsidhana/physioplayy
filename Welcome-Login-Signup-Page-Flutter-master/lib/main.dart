@@ -27,9 +27,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
+       // '/drawer': (context) => const
         '/': (context) => const Welcome(),
         '/login': (context) => const Login(),
         '/signup': (context) => const Signup(),
+
       },
     );
   }

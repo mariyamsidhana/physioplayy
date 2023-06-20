@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_page/pages/dashboard.dart';
 import 'package:flutter_auth_page/widgets/divider.dart';
 import 'package:flutter_auth_page/widgets/socials.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +25,7 @@ class _SignupState extends State<Signup> {
   final ageController = TextEditingController();
   final medController = TextEditingController();
   bool _obscureText = true;
-   bool _obscureTextt = true;
+  bool _obscureTextt = true;
 
   @override
   void dispose() {
@@ -226,7 +227,7 @@ class _SignupState extends State<Signup> {
                         autocorrect: false,
                         keyboardType: TextInputType.visiblePassword,
                         textInputAction: TextInputAction.done,
-                        decoration:  InputDecoration(
+                        decoration: InputDecoration(
                           hintText: "Confirm Password :",
                           hintStyle: TextStyle(
                             fontFamily: 'SourceSansPro',
@@ -244,14 +245,15 @@ class _SignupState extends State<Signup> {
                             color: kPrimaryColor,
                             size: 18,
                           ),
-                          suffixIcon:   GestureDetector(
+                          suffixIcon: GestureDetector(
                             onTap: () {
                               setState(() {
-                                 _obscureTextt = !_obscureTextt;
+                                _obscureTextt = !_obscureTextt;
                               });
-                             
                             },
-                            child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                            child: Icon(_obscureText
+                                ? Icons.visibility
+                                : Icons.visibility_off),
                           ),
                         ),
                       ),
@@ -426,18 +428,32 @@ class _SignupState extends State<Signup> {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
 
-        Future addUserDetails(String name, int age, String med) async {
-          await FirebaseFirestore.instance.collection('users').add({
+        Future addUserDetails(String name, int age, String med, String email) async {
+          final FirebaseAuth auth = FirebaseAuth.instance;
+
+          final User? user = auth.currentUser;
+          final uid = user!.uid;
+
+          await FirebaseFirestore.instance.collection('users').doc(uid).set({
             'username': name,
             'age': age,
             'medical condition': med,
-          });
+            
+            'email':email,
+            'uid': uid
+            // 'docref':''
+          }); /*.then((DocumentReference doc) {
+              var userDoc = FirebaseFirestore.instance.collection('users').doc(doc.id);
+              userDoc.update({'docref':doc.id});
+                
+          });*/
         }
 
         addUserDetails(
           usernameController.text.trim(),
           int.parse(ageController.text.trim()),
           medController.text.trim(),
+          email
         );
 
         print("User created");

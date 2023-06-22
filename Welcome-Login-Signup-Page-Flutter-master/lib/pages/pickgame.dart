@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import '../flappymainfolder/flappyface/game/flappy_main.dart';
+
 // ignore: camel_case_types
 class games extends StatefulWidget {
   const games({super.key});
@@ -41,7 +43,14 @@ class _gamesState extends State<games> {
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       child: InkWell(
                         splashColor: Colors.black26,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FlappyFaceDetect(),
+                            ),
+                          );
+                        },
                         child:
                             Column(mainAxisSize: MainAxisSize.min, children: [
                           Ink.image(

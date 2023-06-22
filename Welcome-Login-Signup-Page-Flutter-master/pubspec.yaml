@@ -40,6 +40,14 @@ dependencies:
   firebase_auth: ^4.4.2
   firebase_core: ^2.4.0
 
+
+  flame: ^1.7.3
+  flame_audio: ^2.0.2
+  google_ml_kit: ^0.13.0
+  google_mlkit_pose_detection: ^0.5.0
+  camera: ^0.10.4
+  image_picker: ^0.8.7+3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,6 +74,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/audio/flappySound.mp3
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -93,6 +102,9 @@ flutter:
         - asset: assets/fonts/SourceSansPro-Regular.ttf
         - asset: assets/fonts/SourceSansPro-SemiBold.ttf
         - asset: assets/fonts/SourceSansPro-SemiBoldItalic.ttf
+    - family: RubikMicrobe
+      fonts:
+        - asset: assets/fonts/RubikMicrobe-Regular.ttf
         
   #
   # For details regarding fonts from package dependencies,

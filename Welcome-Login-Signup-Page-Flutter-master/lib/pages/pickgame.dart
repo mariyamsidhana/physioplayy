@@ -156,7 +156,7 @@ class _gamesState extends State<games> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Ink.image(
-                            image: AssetImage('images/dino.jpg'),
+                            image: AssetImage('assets/images/dino.jpg'),
                             height: 150,
                             width: 150,
                             fit: BoxFit.cover,

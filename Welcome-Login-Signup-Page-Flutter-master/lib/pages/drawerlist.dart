@@ -31,23 +31,23 @@ class _HomeScreenState extends State<HomeScreen> {
       container = games();
     } else if (currentPage == DrawerSections.login) {
       container = Login();
-    } else if (currentPage == DrawerSections.settings) {
+    } /* else if (currentPage == DrawerSections.settings) {
       container = SettingsPage();
-    }
+    }*/
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Color.fromARGB(255, 28, 127, 232),
         title: Text("Physioplay"),
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
+          decoration: const BoxDecoration(color: Colors.cyan
+              /*gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: <Color>[
                   Color.fromARGB(255, 33, 150, 243),
                   Color(0xFF059362)
-                ]),
-          ),
+                ]),*/
+              ),
         ),
       ),
       body: container,
@@ -79,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
               currentPage == DrawerSections.leaderboard ? true : false),
           menuItem(3, "Games", Icons.games_outlined,
               currentPage == DrawerSections.pickgame ? true : false),
-          menuItem(4, "Settings", Icons.settings_outlined,
-              currentPage == DrawerSections.settings ? true : false),
+          /*menuItem(4, "Settings", Icons.settings_outlined,
+              currentPage == DrawerSections.settings ? true : false),*/
           const Divider(),
           Align(
               alignment: Alignment.bottomCenter,
@@ -110,9 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
               currentPage = DrawerSections.leaderboard;
             } else if (id == 3) {
               currentPage = DrawerSections.pickgame;
-            } else if (id == 4) {
+            } /*else if (id == 4) {
               currentPage = DrawerSections.settings;
-            }
+            }*/
           });
         },
         child: Padding(
@@ -148,6 +148,6 @@ enum DrawerSections {
   dashboard,
   leaderboard,
   pickgame,
-  settings,
+  // settings,
   login,
 }

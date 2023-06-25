@@ -50,20 +50,27 @@ class DashboardPage extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(width: 5, color: Colors.white),
-                      color: Colors.white,
-                      boxShadow: [
+                      //borderRadius: BorderRadius.circular(100),
+                      //border: Border.all(width: 5, color: Colors.white),
+                      //color: Colors.white,
+                      /*boxShadow: [
                         const BoxShadow(
                             color: Colors.black12,
                             blurRadius: 20,
                             offset: Offset(5, 5))
-                      ]),
-                  child: const Icon(
+                      ]*/),
+                  child: const CircleAvatar(
+                                backgroundImage: AssetImage('assets/images/gamerr.png'),
+                                //height: 150,
+                                //width: 150,
+                                 radius: 100,
+                                //fit: BoxFit.cover,
+                              ),
+                  /*const Icon(
                     Icons.person,
                     size: 60,
                     color: Colors.blue,
-                  ),
+                  ),*/
                 ),
                 const SizedBox(
                   height: 20,
@@ -74,7 +81,8 @@ class DashboardPage extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState != ConnectionState.done)
                       return Text("Loading data...Please wait");
-                    return Text(username);
+                    return Text(username,
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
                   },
                 )),
 
